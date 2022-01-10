@@ -28,8 +28,9 @@ class Button extends StatelessWidget {
         ),
       ),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadiusDefault),
-          color: kPrimaryColor),
+        borderRadius: BorderRadius.circular(borderRadiusDefault),
+        color: kPrimaryColor,
+      ),
     );
   }
 }

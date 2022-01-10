@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mastering_airplane_bwa/cubit/auth_cubit.dart';
-import 'package:mastering_airplane_bwa/ui/widgets/custom_button.dart';
-import '../../shared/theme.dart';
+import 'package:mastering_airplane_bwa/shared/theme.dart';
 
-class BonusPage extends StatelessWidget {
-  const BonusPage({Key? key}) : super(key: key);
+class MyWallet extends StatelessWidget {
+  const MyWallet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget bonusCard() {
-      return BlocBuilder<AuthCubit, AuthState>(
-        builder: (context, state) {
-          if (state is AuthSuccess) {
-            return Container(
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        if (state is AuthSuccess) {
+          return Center(
+            child: Container(
               width: 311,
               height: 211,
               padding: EdgeInsets.all(marginDefault),
@@ -88,64 +87,12 @@ class BonusPage extends StatelessWidget {
                   )
                 ],
               ),
-            );
-          } else {
-            return SizedBox();
-          }
-        },
-      );
-    }
-
-    Widget title() {
-      return Container(
-        margin: EdgeInsets.only(top: 80),
-        child: Text(
-          "Big Bonus 🎉",
-          style: blackTextStyle.copyWith(
-            fontSize: 32,
-            fontWeight: semiBold,
-          ),
-        ),
-      );
-    }
-
-    Widget subtitle() {
-      return Container(
-        margin: EdgeInsets.only(top: 10),
-        child: Text(
-          "We give you early credit so that\nyou can buy a flight ticket",
-          style: greyTextStyle.copyWith(
-            fontSize: 16,
-            fontWeight: light,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      );
-    }
-
-    Widget buttonStarted() {
-      return Button(
-        title: "Start Fly Now",
-        margin: EdgeInsets.only(top: 50),
-        onPressed: () {
-          Navigator.pushNamed(context, "/main");
-        },
-        width: 220,
-      );
-    }
-
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            bonusCard(),
-            title(),
-            subtitle(),
-            buttonStarted(),
-          ],
-        ),
-      ),
+            ),
+          );
+        } else {
+          return SizedBox();
+        }
+      },
     );
   }
 }

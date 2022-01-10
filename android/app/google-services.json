@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "904953170190",
+    "project_id": "airplane-ba743",
+    "storage_bucket": "airplane-ba743.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904953170190:android:e9b46f5950b377cb34ef5f",
+        "android_client_info": {
+          "package_name": "com.syazimanuray.mastering_airplane_bwa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904953170190-p2dh97lu62aug3epjs8hgoamhmqq7nqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUow4JsmCRgEYTt4wvKSh8C70Y4uIKhVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904953170190-p2dh97lu62aug3epjs8hgoamhmqq7nqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

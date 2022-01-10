@@ -1,96 +1,94 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mastering_airplane_bwa/cubit/auth_cubit.dart';
+import 'package:mastering_airplane_bwa/cubit/destination_cubit.dart';
+import 'package:mastering_airplane_bwa/models/destination_model.dart';
 import 'package:mastering_airplane_bwa/shared/theme.dart';
 import 'package:mastering_airplane_bwa/ui/widgets/destination_card.dart';
 import 'package:mastering_airplane_bwa/ui/widgets/destination_tile.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    context.read<DestinationCubit>().fetchDestination();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Widget header() {
-      return Container(
-        margin: EdgeInsets.only(
-          top: 30,
-          left: marginDefault,
-          right: marginDefault,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      return BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          if (state is AuthSuccess) {
+            return Container(
+              margin: EdgeInsets.only(
+                top: 30,
+                left: marginDefault,
+                right: marginDefault,
+              ),
+              child: Row(
                 children: [
-                  Text(
-                    "Howdy,\nUray Syaziman",
-                    style: blackTextStyle.copyWith(
-                        fontSize: 24,
-                        fontWeight: semiBold,
-                        overflow: TextOverflow.ellipsis),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Howdy,\n${state.user.name}",
+                          style: blackTextStyle.copyWith(
+                              fontSize: 24,
+                              fontWeight: semiBold,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                        SizedBox(
+                          height: 6,
+                        ),
+                        Text(
+                          "Where to fly today?",
+                          style: greyTextStyle.copyWith(
+                            fontSize: 16,
+                            fontWeight: light,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Text(
-                    "Where to fly today?",
-                    style: greyTextStyle.copyWith(
-                      fontSize: 16,
-                      fontWeight: light,
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage("assets/img_profile.png"),
+                      ),
                     ),
                   )
                 ],
               ),
-            ),
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: AssetImage("assets/img_profile.png"),
-                ),
-              ),
-            )
-          ],
-        ),
+            );
+          } else {
+            return SizedBox();
+          }
+        },
       );
     }
 
-    Widget popularDestination() {
+    Widget popularDestination(List<DestinationModel> destination) {
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DestinationCard(
-              imageUrl: "assets/img_destination1.png",
-              name: "Lake Ciliwung",
-              city: "Tangerang",
-              rating: 4.8,
-            ),
-            DestinationCard(
-              imageUrl: "assets/img_destination2.png",
-              name: "White Houses",
-              city: "Spain",
-              rating: 4.7,
-            ),
-            DestinationCard(
-              imageUrl: "assets/img_destination3.png",
-              name: "Hill Heyo",
-              city: "Monaco",
-              rating: 4.8,
-            ),
-            DestinationCard(
-              imageUrl: "assets/img_destination4.png",
-              name: "Menarra",
-              city: "Japan",
-              rating: 5.0,
-            ),
-            DestinationCard(
-              imageUrl: "assets/img_destination5.png",
-              name: "Payung Teduh",
-              city: "Singapore",
-              rating: 4.8,
+            Row(
+              children: destination.map((DestinationModel destination) {
+                return DestinationCard(destination);
+              }).toList(),
             ),
             SizedBox(
               width: 24,
@@ -100,7 +98,7 @@ class HomePage extends StatelessWidget {
       );
     }
 
-    Widget newDestination() {
+    Widget newDestination(List<DestinationModel> destinationTile) {
       return Container(
         margin: EdgeInsets.only(
           bottom: 110,
@@ -118,47 +116,42 @@ class HomePage extends StatelessWidget {
                 fontWeight: semiBold,
               ),
             ),
-            DestinationTile(
-              imageUrl: "assets/img_destination7.png",
-              name: "Danau Beratan",
-              city: "Singaraja",
-              rating: 4.5,
-            ),
-            DestinationTile(
-              imageUrl: "assets/img_destination6.png",
-              name: "Sydney Opera",
-              city: "Australia",
-              rating: 4.7,
-            ),
-            DestinationTile(
-              imageUrl: "assets/img_destination8.png",
-              name: "Roma",
-              city: "Italy",
-              rating: 4.8,
-            ),
-            DestinationTile(
-              imageUrl: "assets/img_destination5.png",
-              name: "Payung Teduh",
-              city: "Singapura",
-              rating: 4.5,
-            ),
-            DestinationTile(
-              imageUrl: "assets/img_destination3.png",
-              name: "Hill Hey",
-              city: "Monaco",
-              rating: 4.7,
+            Column(
+              children:
+                  destinationTile.map((DestinationModel destinationForTile) {
+                return DestinationTile(destinationForTile);
+              }).toList(),
             ),
           ],
         ),
       );
     }
 
-    return ListView(
-      children: [
-        header(),
-        popularDestination(),
-        newDestination(),
-      ],
+    return BlocConsumer<DestinationCubit, DestinationState>(
+      listener: (context, state) {
+        if (state is DestinationFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: kRedColor,
+              content: Text(state.error),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is DestinationSuccess) {
+          return ListView(
+            children: [
+              header(),
+              popularDestination(state.destinations),
+              newDestination(state.destinations),
+            ],
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
 }
